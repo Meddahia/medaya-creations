@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from '@inertiajs/react';
 import { Moon, Sun, ChevronDown, ShoppingCart, Menu, X } from 'lucide-react';
+import { useCart } from '../context/CartContext';
 
 export default function Layout({ children }) {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const { cartItems } = useCart();
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -22,7 +23,7 @@ export default function Layout({ children }) {
       <header className="relative z-20 border-b border-[#9C7056] dark:border-[#D2C7BF]">
         <div className="flex justify-between items-center p-4 md:p-6">
           <h1 className="text-3xl font-serif font-bold">
-            <Link href="/">MEDDAYA</Link>
+            <Link href="/">MEDAYA</Link>
           </h1>
 
           {/* Desktop Nav */}
@@ -43,9 +44,9 @@ export default function Layout({ children }) {
 
             <Link href="/panier" className="relative hover:text-[#9C7056] dark:hover:text-[#D2C7BF]">
               <ShoppingCart size={24} />
-              {cartCount > 0 && (
+              {cartItems.length > 0 && (
                 <span className="absolute -top-2 -right-2 bg-[#9C7056] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {cartCount}
+                  {cartItems.length}
                 </span>
               )}
             </Link>
@@ -108,7 +109,7 @@ export default function Layout({ children }) {
 
       {/* Footer */}
       <footer className="p-6 text-center text-sm border-t border-[#9C7056] dark:border-[#D2C7BF]">
-        &copy; {new Date().getFullYear()} Meddaya Créations. Tous droits réservés.
+        &copy; {new Date().getFullYear()} Medaya Créations. Tous droits réservés.
       </footer>
     </div>
   );
