@@ -1,16 +1,39 @@
 import React, { useContext } from 'react';
 import Layout from '../layouts/Layout';
 import { CartContext } from '../context/CartContext';
+import { Trash2 } from 'lucide-react'; // Import de l'icône
 
 export default function Cart() {
   const { cartItems, addToCart, removeFromCart, clearCart } = useContext(CartContext);
 
-  // Calculer le total du panier
   const totalPrice = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+  // Détecter le type d'appareil
+  const getPaymentButtonLabel = () => {
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+      return 'Payer avec Apple Pay';
+    } else if (/android/i.test(userAgent)) {
+      return 'Payer avec Google Pay';
+    } else {
+      return 'Payer maintenant';
+    }
+  };
 
   return (
     <Layout>
-      <div className="max-w-4xl mx-auto p-6">
+      <div className="max-w-4xl mx-auto p-6 relative">
+        {/* Bouton Vider le panier */}
+        {cartItems.length > 0 && (
+          <button
+            onClick={clearCart}
+            className="absolute top-6 right-6 text-[#9C7056] dark:text-[#D2C7BF] hover:text-red-500 transition-colors"
+            title="Vider le panier"
+          >
+            <Trash2 size={24} />
+          </button>
+        )}
+
         <h1 className="text-3xl font-bold text-[#613420] dark:text-[#D2C7BF] mb-6">Mon Panier</h1>
 
         {cartItems.length === 0 ? (
@@ -48,11 +71,12 @@ export default function Cart() {
 
             <div className="mt-6 flex justify-between items-center">
               <p className="text-lg font-bold text-[#613420] dark:text-[#D2C7BF]">Total: {totalPrice.toFixed(2)} €</p>
+
               <button
-                onClick={clearCart}
-                className="px-4 py-2 bg-[#9C7056] text-white dark:bg-[#D2C7BF] dark:text-[#1a1a1a] rounded hover:bg-[#7c5a43] dark:hover:bg-[#CEBBAE] transition-colors"
+                onClick={() => alert('Fonctionnalité de paiement à implémenter')}
+                className="px-4 py-2 bg-black text-white rounded hover:opacity-90 transition-colors"
               >
-                Vider le panier
+                {getPaymentButtonLabel()}
               </button>
             </div>
           </>
